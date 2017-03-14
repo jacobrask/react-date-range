@@ -12,8 +12,8 @@ class DateRange extends Component {
 
     const { format, linkedCalendars, theme } = props;
 
-    const startDate = parseInput(props.startDate, format, 'startOf');
-    const endDate   = parseInput(props.endDate, format, 'endOf');
+    const startDate = props.startDate && parseInput(props.startDate, format, 'startOf');
+    const endDate   = props.startDate && parseInput(props.endDate, format, 'endOf');
 
     this.state = {
       range     : { startDate, endDate },
@@ -31,9 +31,10 @@ class DateRange extends Component {
 
   orderRange(range) {
     const { startDate, endDate } = range;
-    const swap = startDate.isAfter(endDate);
 
-    if (!swap) return range;
+    if (!startDate || !endDate || !startDate.isAfter(endDate)) {
+      return range;
+    }
 
     return {
       startDate : endDate,
@@ -96,10 +97,19 @@ class DateRange extends Component {
       const oldStartDate = this.props.startDate && parseInput(this.props.startDate, format, 'startOf');
       const oldEndDate   = this.props.endDate   && parseInput(this.props.endDate, format, 'endOf');
 
-      if (!startDate.isSame(oldStartDate) || !endDate.isSame(oldEndDate)) {
+      const startDateDidChange = (
+        (!startDate || !oldStartDate) && startDate !== oldStartDate ||
+        startDate && !startDate.isSame(oldStartDate)
+      );
+      const endDateDidChange = (
+        (!endDate || !oldEndDate) && endDate !== oldEndDate ||
+        endDate && !endDate.isSame(oldEndDate)
+      );
+
+      if (startDateDidChange || endDateDidChange) {
         this.setRange({
-          startDate: startDate || oldStartDate,
-          endDate: endDate || oldEndDate
+          startDate: startDate,
+          endDate: endDate,
         });
       }
     }
@@ -111,9 +121,12 @@ class DateRange extends Component {
     const { styles } = this;
 
     const classes = { ...defaultClasses, ...classNames };
-    const yearsDiff = range.endDate.year() - range.startDate.year();
-    const monthsDiff = range.endDate.month() - range.startDate.month();
-    const diff = yearsDiff * 12 + monthsDiff;
+    let diff = 0;
+    if (range.endDate && range.startDate) {
+      const yearsDiff = range.endDate.year() - range.startDate.year();
+      const monthsDiff = range.endDate.month() - range.startDate.month();
+      diff = yearsDiff * 12 + monthsDiff;
+    }
     const calendarsCount = Number(calendars) - 1;
 
     return (

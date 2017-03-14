@@ -15,13 +15,13 @@ function checkRange(dayMoment, range) {
 function checkStartEdge(dayMoment, range) {
   const { startDate } = range;
 
-  return dayMoment.startOf('day').isSame(startDate.startOf('day'));
+  return startDate && dayMoment.startOf('day').isSame(startDate.startOf('day'));
 }
 
 function checkEndEdge(dayMoment, range) {
   const { endDate } = range;
 
-  return dayMoment.endOf('day').isSame(endDate.endOf('day'));
+  return endDate && dayMoment.endOf('day').isSame(endDate.endOf('day'));
 }
 
 function isOusideMinMax(dayMoment, minDate, maxDate, format) {
