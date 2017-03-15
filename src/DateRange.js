@@ -116,7 +116,7 @@ class DateRange extends Component {
   }
 
   render() {
-    const { ranges, format, linkedCalendars, style, calendars, firstDayOfWeek, minDate, maxDate, classNames, onlyClasses, specialDays, lang, disableDaysBeforeToday, offsetPositive, shownDate, showMonthArrow, rangedCalendars } = this.props;
+    const { ranges, format, linkedCalendars, style, calendars, firstDayOfWeek, minDate, maxDate, classNames, onlyClasses, specialDays, locale, disableDaysBeforeToday, offsetPositive, shownDate, showMonthArrow, rangedCalendars } = this.props;
     const { range, link } = this.state;
     const { styles } = this;
 
@@ -155,7 +155,7 @@ class DateRange extends Component {
                 showMonthArrow={ showMonthArrow }
                 shownDate={ shownDate }
                 disableDaysBeforeToday={ disableDaysBeforeToday }
-                lang={ lang }
+                locale={ locale }
                 key={i}
                 offset={ realOffset }
                 link={ linkedCalendars && link }
